@@ -1,0 +1,214 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vnext-cms
+  namespace: public-workload
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: vnext-cms
+  template:
+    metadata:
+      labels:
+        app: vnext-cms
+    spec:
+      serviceAccountName: public-workload-pod-identity
+      containers:
+        - name: vnext-cms
+          image: ${IMAGE_TAG}
+          env:
+            - name: HOST
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-HOST
+            - name: PORT
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-PORT
+            - name: APP_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-APP-KEYS
+            - name: API_TOKEN_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-API-TOKEN-SALT
+            - name: ADMIN_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-ADMIN-JWT-SECRET
+            - name: TRANSFER_TOKEN_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-TRANSFER-TOKEN-SALT
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-ENCRYPTION-KEY
+            - name: DATABASE_CLIENT
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-DATABASE-CLIENT
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-DATABASE-HOST
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-DATABASE-PORT
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-DATABASE-NAME
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-DATABASE-USERNAME
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-DATABASE-PASSWORD
+            - name: DATABASE_SSL
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-DATABASE-SSL
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-JWT-SECRET
+            - name: AZURE_ACCOUNT_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-ACCOUNT-NAME
+            - name: AZURE_CONTAINER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-CONTAINER-NAME
+            - name: AZURE_ACCOUNT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-ACCOUNT-KEY
+            - name: AZURE_SERVICE_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-SERVICE-BASE-URL
+            - name: AZURE_DEFAULT_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-DEFAULT-PATH
+            - name: AZURE_CDN_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-CDN-BASE-URL
+            - name: AZURE_DEFAULT_CACHE_CONTROL
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-DEFAULT-CACHE-CONTROL
+            - name: AZURE_REMOVE_CN
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-REMOVE-CN
+          ports:
+            - containerPort: 1337
+          resources:
+            requests:
+              cpu: REQUEST_CPU
+              memory: REQUEST_MEMORY
+            limits:
+              cpu: LIMITS_CPU
+              memory: LIMITS_MEMORY
+          livenessProbe:
+            httpGet:
+              path: /admin
+              port: 1337
+            initialDelaySeconds: 30
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /admin
+              port: 1337
+            initialDelaySeconds: 30
+            periodSeconds: 3
+            successThreshold: 2
+          startupProbe:
+            httpGet:
+              path: /admin
+              port: 1337
+            failureThreshold: 30
+            periodSeconds: 10
+          volumeMounts:
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+          securityContext:
+            privileged: false
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: azure-keyvault-spc
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: vnext-cms-hpa
+  namespace: public-workload
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: vnext-cms
+  minReplicas: ${MIN_REPLICAS}
+  maxReplicas: ${MAX_REPLICAS}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: ${AVERAGE_CPU_UTILIZATION}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: ${AVERAGE_MEMORY_UTILIZATION}

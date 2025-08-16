@@ -1,0 +1,153 @@
+version: 2.1
+
+executors:
+  docker-executor:
+    docker:
+      - image: bayesimpact/circleci:cyrille-sentry
+    working_directory: ~/repo_vcms
+
+commands:
+  deploy_to_aks:
+    description: "Deploy to Azure AKS cluster"
+    parameters:
+      aks_cluster_name:
+        type: string
+      env_name:
+        type: string
+      deploy_folder:
+        type: string
+      requestCpu:
+        type: string
+      requestMemory:
+        type: string
+      limitsCpu:
+        type: string
+      limitsMemory:
+        type: string
+      minReplicas:
+        type: integer
+      maxReplicas:
+        type: integer
+      averageCpuUtilization:
+        type: integer
+      averageMemoryUtilization:
+        type: integer
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo_vcms
+      - run:
+          name: Load shared ENV vars
+          command: |
+            source ~/repo_vcms/ENV.txt
+            echo "export SPRING_PROFILES_ACTIVE=<< parameters.env_name >>" >> $BASH_ENV
+            echo "export ENV_PREFIX=<< parameters.env_name >>" >> $BASH_ENV
+            echo "export ENV_PREFIX_LOWER=$(echo << parameters.env_name >> | tr '[:upper:]' '[:lower:]')" >> $BASH_ENV
+            echo "export DEPLOY_FOLDER=<< parameters.deploy_folder >>" >> $BASH_ENV
+            echo "export RESOURCE_GROUP_NAME=${<< parameters.env_name >>_AZURE_RESOURCE_GROUP}" >> $BASH_ENV
+            echo "export REQUEST_CPU=<< parameters.requestCpu >>" >> $BASH_ENV
+            echo "export REQUEST_MEMORY=<< parameters.requestMemory >>" >> $BASH_ENV
+            echo "export LIMITS_CPU=<< parameters.limitsCpu >>" >> $BASH_ENV
+            echo "export LIMITS_MEMORY=<< parameters.limitsMemory >>" >> $BASH_ENV
+            echo "export MIN_REPLICAS=<< parameters.minReplicas >>" >> $BASH_ENV
+            echo "export MAX_REPLICAS=<< parameters.maxReplicas >>" >> $BASH_ENV
+            echo "export AVERAGE_CPU_UTILIZATION=<< parameters.averageCpuUtilization >>" >> $BASH_ENV
+            echo "export AVERAGE_MEMORY_UTILIZATION=<< parameters.averageMemoryUtilization >>" >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Azure CLI login
+          command: |
+            az login --service-principal \
+              -u ${<< parameters.env_name >>_AZURE_CLIENT_ID} \
+              -p ${<< parameters.env_name >>_AZURE_CLIENT_SECRET} \
+              --tenant ${<< parameters.env_name >>_AZURE_TENANT_ID} \
+              --allow-no-subscriptions
+      - run:
+          name: Set kubectl context
+          command: |
+            az aks get-credentials --name << parameters.aks_cluster_name >> \
+              --resource-group ${RESOURCE_GROUP_NAME} --overwrite-existing
+      - run:
+          name: Deploy to AKS
+          command: |
+            source ~/repo_vcms/ENV.txt
+            mkdir -p k8s-final
+            for f in ${DEPLOY_FOLDER}/*.yaml; do
+              envsubst < "$f" > "k8s-final/$(basename $f)"
+            done
+
+            kubectl apply -f k8s-final/service.yaml
+            kubectl apply -f k8s-final/deployment.yaml
+            kubectl apply -f k8s-final/destinationrule.yaml
+            kubectl apply -f k8s-final/virtualservice.yaml
+
+jobs:
+  build_prod:
+    machine:
+      enabled: true
+      resource_class: viome/prod-azure-private-runner
+    working_directory: ~/repo_vcms
+    steps:
+      - checkout
+      - run:
+          name: Login and push image to ACR (PD)
+          command: |
+            az login --service-principal \
+              -u $PD_AZURE_CLIENT_ID \
+              -p $PD_AZURE_CLIENT_SECRET \
+              --tenant $PD_AZURE_TENANT_ID --allow-no-subscriptions
+            az acr login --name $PD_AZURE_ACR_NAME
+
+            export ACR_NAME=$PD_AZURE_ACR_NAME
+            export ACR_REPOSITORY=$PD_ACR_REPOSITORY_NAME
+            export IMAGE_TAG=${ACR_NAME}.azurecr.io/${ACR_REPOSITORY}:${CIRCLE_SHA1}
+
+            echo "export ACR_NAME=${ACR_NAME}" > ENV.txt
+            echo "export ACR_REPOSITORY=${ACR_REPOSITORY}" >> ENV.txt
+            echo "export IMAGE_TAG=${IMAGE_TAG}" >> ENV.txt
+            echo "export COMMIT_ID=${CIRCLE_SHA1}" >> ENV.txt
+            echo "export ENV_PREFIX=PD" >> ENV.txt
+            echo "export ENV_PREFIX_LOWER=pd" >> ENV.txt
+
+            cat ENV.txt >> $BASH_ENV
+            source $BASH_ENV
+
+            docker build -t ${IMAGE_TAG} -f ~/repo_vcms/Dockerfile ~/repo_vcms
+            docker push ${IMAGE_TAG}
+      - persist_to_workspace:
+          root: ~/repo_vcms
+          paths:
+            - ENV.txt
+
+  deploy_prod:
+    machine:
+      enabled: true
+      resource_class: viome/prod-azure-private-runner
+    working_directory: ~/repo_vcms
+    steps:
+      - deploy_to_aks:
+          aks_cluster_name: aks-viome-pd-eu-01
+          env_name: PD
+          deploy_folder: deployment/prod
+          requestCpu: '1'
+          requestMemory: '2Gi'
+          limitsCpu: '2'
+          limitsMemory: 4Gi
+          minReplicas: 2
+          maxReplicas: 5
+          averageCpuUtilization: 80
+          averageMemoryUtilization: 80
+
+workflows:
+  version: 2
+  production_pipeline:
+    jobs:
+      - start_pipeline:
+          type: approval
+      - build_prod:
+          requires: [start_pipeline]
+      - apprv_deploy:
+          type: approval
+          requires: [build_prod]
+      - deploy_prod:
+          requires: [apprv_deploy]

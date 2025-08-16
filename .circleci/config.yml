@@ -128,7 +128,7 @@ jobs:
       - deploy_to_aks:
           aks_cluster_name: aks-viome-pd-eu-01
           env_name: PD
-          deploy_folder: deployment/prod
+          deploy_folder: deployment
           requestCpu: '1'
           requestMemory: '2Gi'
           limitsCpu: '2'

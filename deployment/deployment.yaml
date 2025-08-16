@@ -142,11 +142,11 @@ spec:
             - containerPort: 1337
           resources:
             requests:
-              cpu: REQUEST_CPU
-              memory: REQUEST_MEMORY
+              cpu: ${REQUEST_CPU}
+              memory: ${REQUEST_MEMORY}
             limits:
-              cpu: LIMITS_CPU
-              memory: LIMITS_MEMORY
+              cpu: ${LIMITS_CPU}
+              memory: ${LIMITS_MEMORY}
           livenessProbe:
             httpGet:
               path: /admin

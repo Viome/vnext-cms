@@ -132,7 +132,7 @@ jobs:
           requestCpu: '1'
           requestMemory: '2Gi'
           limitsCpu: '2'
-          limitsMemory: 4Gi
+          limitsMemory: '4Gi'
           minReplicas: 2
           maxReplicas: 5
           averageCpuUtilization: 80

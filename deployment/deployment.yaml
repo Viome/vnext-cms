@@ -138,6 +138,11 @@ spec:
                 secretKeyRef:
                   name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
                   key: VCMS-AZURE-REMOVE-CN
+            - name: AZURE_CDN_STRAPI_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: kv-shared-${ENV_PREFIX_LOWER}-eu-01
+                  key: VCMS-AZURE-CDN-STRAPI-DOMAIN
           ports:
             - containerPort: 1337
           resources:

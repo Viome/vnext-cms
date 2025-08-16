@@ -14,14 +14,16 @@ export default [
             "blob:",
             "dl.airtable.com",
             "https://market-assets.strapi.io",
-            `https://strapi.azure.viome.com`,
+            `https://${process.env.STORAGE_ACCOUNT}.blob.core.windows.net`,
+            `https://${process.env.AZURE_CDN_STRAPI_DOMAIN}`
           ],
           "media-src": [
             "'self'",
             "data:",
             "blob:",
             "dl.airtable.com",
-            `https://strapi.azure.viome.com`,
+            `https://${process.env.STORAGE_ACCOUNT}.blob.core.windows.net`,
+            `https://${process.env.AZURE_CDN_STRAPI_DOMAIN}`
           ],
           upgradeInsecureRequests: null,
         },

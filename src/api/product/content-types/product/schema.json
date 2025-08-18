@@ -1,0 +1,71 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "product"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "variantId": {
+      "type": "biginteger",
+      "required": true
+    },
+    "currentPrice": {
+      "type": "string",
+      "required": true
+    },
+    "comparePrice": {
+      "type": "string"
+    },
+    "productImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "longDescription": {
+      "type": "text"
+    },
+    "buyingOptions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    },
+    "salesMessage": {
+      "type": "text"
+    },
+    "mobilePromo": {
+      "type": "json"
+    },
+    "mobileMeta": {
+      "type": "json"
+    },
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "upsellSlug": {
+      "type": "string"
+    },
+    "upsellMeta": {
+      "type": "json"
+    }
+  }
+}

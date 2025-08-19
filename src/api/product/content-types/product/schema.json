@@ -66,6 +66,16 @@
     },
     "upsellMeta": {
       "type": "json"
+    },
+    "productHeroImages": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }

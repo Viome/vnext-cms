@@ -404,6 +404,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     mobileMeta: Schema.Attribute.JSON;
     mobilePromo: Schema.Attribute.JSON;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    productHeroImages: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
     productImage: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     >;

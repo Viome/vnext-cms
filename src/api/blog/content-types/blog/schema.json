@@ -94,6 +94,9 @@
       "relation": "manyToMany",
       "target": "api::reference.reference",
       "inversedBy": "blogs"
+    },
+    "external_html": {
+      "type": "text"
     }
   }
 }

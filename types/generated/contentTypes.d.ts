@@ -424,6 +424,7 @@ export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     displayDate: Schema.Attribute.DateTime;
     duration: Schema.Attribute.Integer;
+    external_html: Schema.Attribute.Text;
     featuredImage: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     >;

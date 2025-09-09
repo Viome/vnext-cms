@@ -417,7 +417,9 @@ export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
   };
   attributes: {
     authors: Schema.Attribute.Relation<'manyToMany', 'api::author.author'>;
-    body: Schema.Attribute.Blocks;
+    body: Schema.Attribute.DynamicZone<
+      ['content.video', 'content.rich-text', 'content.image']
+    >;
     canonicalUrl: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

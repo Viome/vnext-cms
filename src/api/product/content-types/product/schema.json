@@ -77,11 +77,6 @@
         "audios"
       ]
     },
-    "isPlan": {
-      "type": "boolean",
-      "required": false,
-      "default": false
-    },
     "heroDescriptionComponent": {
       "type": "string",
       "required": false
@@ -108,6 +103,10 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::product.product"
+    },
+    "productMetaData": {
+      "type": "json", 
+      "required": false
     }
   }
 }

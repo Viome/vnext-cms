@@ -1,0 +1,57 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_banners",
+  "info": {
+    "singularName": "site-banner",
+    "pluralName": "site-banners",
+    "displayName": "Site Banner"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "isEnabled": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "excludedPaths": {
+      "type": "json"
+    },
+    "campaignStart": {
+      "type": "datetime"
+    },
+    "campaignEnd": {
+      "type": "datetime"
+    },
+    "campaignClickUrl": {
+      "type": "string"
+    },
+    "campaignBackgroundColor": {
+      "type": "string",
+      "default": "#000000",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+    },
+    "campaignText": {
+      "type": "blocks"
+    },
+    "campaignHasButton": {
+      "type": "boolean",
+      "default": false
+    },
+    "campaignButtonType": {
+      "type": "enumeration",
+      "enum": [
+        "underlined",
+        "filled"
+      ]
+    },
+    "campaignButtonLabel": {
+      "type": "string"
+    },
+    "campaignButtonUrl": {
+      "type": "string"
+    }
+  }
+}

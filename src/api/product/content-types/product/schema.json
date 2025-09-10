@@ -76,6 +76,38 @@
         "videos",
         "audios"
       ]
+    },
+    "isPlan": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    "heroDescriptionComponent": {
+      "type": "string",
+      "required": false
+    },
+    "heroDescription": {
+      "type": "string",
+      "required": false
+    },
+    "productType": {
+      "type": "enumeration",
+      "enum": ["tests", "trial_bundle", "subscription"],
+      "required": false
+    },
+    "hasInteractiveElement": {
+      "type": "boolean",
+      "required": true
+    },
+    "addons": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    },
+    "optionalAddons": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
     }
   }
 }

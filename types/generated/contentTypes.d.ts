@@ -384,6 +384,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    addons: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     buyingOptions: Schema.Attribute.Relation<
       'oneToMany',
       'api::product.product'
@@ -394,6 +395,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     currentPrice: Schema.Attribute.String & Schema.Attribute.Required;
     description: Schema.Attribute.Text;
+    hasInteractiveElement: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    heroDescription: Schema.Attribute.String;
+    heroDescriptionComponent: Schema.Attribute.String;
+    isPlan: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -404,12 +409,19 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     mobileMeta: Schema.Attribute.JSON;
     mobilePromo: Schema.Attribute.JSON;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    optionalAddons: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product.product'
+    >;
     productHeroImages: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
     productImage: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
+    >;
+    productType: Schema.Attribute.Enumeration<
+      ['tests', 'trial_bundle', 'subscription']
     >;
     publishedAt: Schema.Attribute.DateTime;
     salesMessage: Schema.Attribute.Text;

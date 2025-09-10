@@ -630,6 +630,7 @@ export interface ApiSiteBannerSiteBanner extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    textColor: Schema.Attribute.String & Schema.Attribute.DefaultTo<'#000000'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

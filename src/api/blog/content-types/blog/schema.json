@@ -26,7 +26,12 @@
       "type": "datetime"
     },
     "body": {
-      "type": "blocks"
+      "type": "dynamiczone",
+      "components": [
+        "content.video",
+        "content.rich-text",
+        "content.image"
+      ]
     },
     "featuredImage": {
       "type": "media",

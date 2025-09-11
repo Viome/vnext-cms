@@ -417,7 +417,9 @@ export interface ApiBlogBlog extends Struct.CollectionTypeSchema {
   };
   attributes: {
     authors: Schema.Attribute.Relation<'manyToMany', 'api::author.author'>;
-    body: Schema.Attribute.Blocks;
+    body: Schema.Attribute.DynamicZone<
+      ['content.video', 'content.rich-text', 'content.image']
+    >;
     canonicalUrl: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -522,7 +524,6 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     hasInteractiveElement: Schema.Attribute.Boolean & Schema.Attribute.Required;
     heroDescription: Schema.Attribute.String;
     heroDescriptionComponent: Schema.Attribute.String;
-    isPlan: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -544,6 +545,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     productImage: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     >;
+    productMetaData: Schema.Attribute.JSON;
     productType: Schema.Attribute.Enumeration<
       ['tests', 'trial_bundle', 'subscription']
     >;
@@ -589,6 +591,49 @@ export interface ApiReferenceReference extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     url: Schema.Attribute.String;
+  };
+}
+
+export interface ApiSiteBannerSiteBanner extends Struct.SingleTypeSchema {
+  collectionName: 'site_banners';
+  info: {
+    displayName: 'Site Banner';
+    pluralName: 'site-banners';
+    singularName: 'site-banner';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    campaignBackgroundColor: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'#000000'>;
+    campaignButtonLabel: Schema.Attribute.String;
+    campaignButtonType: Schema.Attribute.Enumeration<['underlined', 'filled']>;
+    campaignButtonUrl: Schema.Attribute.String;
+    campaignClickUrl: Schema.Attribute.String;
+    campaignEnd: Schema.Attribute.DateTime;
+    campaignHasButton: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    campaignStart: Schema.Attribute.DateTime;
+    campaignText: Schema.Attribute.Blocks;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    excludedPaths: Schema.Attribute.JSON;
+    isEnabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::site-banner.site-banner'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    textColor: Schema.Attribute.String & Schema.Attribute.DefaultTo<'#000000'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1106,6 +1151,7 @@ declare module '@strapi/strapi' {
       'api::category.category': ApiCategoryCategory;
       'api::product.product': ApiProductProduct;
       'api::reference.reference': ApiReferenceReference;
+      'api::site-banner.site-banner': ApiSiteBannerSiteBanner;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

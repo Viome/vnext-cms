@@ -6,7 +6,6 @@
     "pluralName": "products",
     "displayName": "product"
   },
-  "mainField": "productSku",
   "options": {
     "draftAndPublish": true
   },
@@ -121,6 +120,13 @@
     "productMetaData": {
       "type": "json",
       "required": false
+    },
+    "productAltImage": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
 }

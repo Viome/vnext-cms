@@ -538,6 +538,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::product.product'
     >;
+    productAltImage: Schema.Attribute.Media<'images', true>;
     productHeroImages: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true

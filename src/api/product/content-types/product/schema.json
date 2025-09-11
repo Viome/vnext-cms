@@ -95,7 +95,7 @@
     },
     "productType": {
       "type": "enumeration",
-      "enum": ["tests", "trial_bundle", "subscription"],
+      "enum": ["Health Tests", "Essential Bundles", "Personalized Health Products"],
       "required": false
     },
     "hasInteractiveElement": {

@@ -548,7 +548,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     productMetaData: Schema.Attribute.JSON;
     productSku: Schema.Attribute.String;
     productType: Schema.Attribute.Enumeration<
-      ['tests', 'trial_bundle', 'subscription']
+      ['Health Tests', 'Essential Bundles', 'Personalized Health Products']
     >;
     publishedAt: Schema.Attribute.DateTime;
     salesMessage: Schema.Attribute.Text;

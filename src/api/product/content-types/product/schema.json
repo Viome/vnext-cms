@@ -17,7 +17,8 @@
     },
     "productSku": {
       "type": "string",
-      "required": false
+      "required": true,
+      "unique": true
     },
     "variantId": {
       "type": "biginteger",
@@ -95,8 +96,12 @@
     },
     "productType": {
       "type": "enumeration",
-      "enum": ["Health Tests", "Essential Bundles", "Personalized Health Products"],
-      "required": false
+      "required": false,
+      "enum": [
+        "Health Tests",
+        "Essential Bundles",
+        "Personalized Health Products"
+      ]
     },
     "hasInteractiveElement": {
       "type": "boolean",
@@ -113,7 +118,7 @@
       "target": "api::product.product"
     },
     "productMetaData": {
-      "type": "json", 
+      "type": "json",
       "required": false
     }
   }

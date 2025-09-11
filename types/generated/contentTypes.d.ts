@@ -546,11 +546,13 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'images' | 'files' | 'videos' | 'audios'
     >;
     productMetaData: Schema.Attribute.JSON;
+    productSku: Schema.Attribute.String;
     productType: Schema.Attribute.Enumeration<
       ['tests', 'trial_bundle', 'subscription']
     >;
     publishedAt: Schema.Attribute.DateTime;
     salesMessage: Schema.Attribute.Text;
+    shopifySubscriptionPlan: Schema.Attribute.BigInteger;
     slug: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;

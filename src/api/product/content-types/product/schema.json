@@ -15,12 +15,22 @@
       "type": "string",
       "required": true
     },
-    "description": {
-      "type": "text"
+    "productSku": {
+      "type": "string",
+      "required": false
     },
     "variantId": {
       "type": "biginteger",
       "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "shopifySubscriptionPlan": {
+      "type": "biginteger",
+      "required": false
     },
     "currentPrice": {
       "type": "string",
@@ -28,6 +38,20 @@
     },
     "comparePrice": {
       "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "longDescription": {
+      "type": "text"
+    },
+    "salesMessage": {
+      "type": "text"
+    },
+    "buyingOptions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
     },
     "productImage": {
       "type": "media",
@@ -39,27 +63,11 @@
         "audios"
       ]
     },
-    "longDescription": {
-      "type": "text"
-    },
-    "buyingOptions": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product.product"
-    },
-    "salesMessage": {
-      "type": "text"
-    },
     "mobilePromo": {
       "type": "json"
     },
     "mobileMeta": {
       "type": "json"
-    },
-    "slug": {
-      "type": "string",
-      "required": true,
-      "unique": true
     },
     "upsellSlug": {
       "type": "string"

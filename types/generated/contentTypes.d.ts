@@ -546,7 +546,9 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'images' | 'files' | 'videos' | 'audios'
     >;
     productMetaData: Schema.Attribute.JSON;
-    productSku: Schema.Attribute.String;
+    productSku: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     productType: Schema.Attribute.Enumeration<
       ['Health Tests', 'Essential Bundles', 'Personalized Health Products']
     >;

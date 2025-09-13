@@ -129,9 +129,13 @@
       ]
     },
     "descriptionSection": {
-      "type": "component",
-      "repeatable": false,
-      "component": "content.description-section",
+      "type": "dynamiczone",
+      "components": [
+        "content.description-section",
+        "content.rich-text",
+        "content.image",
+        "content.video"
+      ],
       "required": false
     }
   }

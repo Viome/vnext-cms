@@ -521,6 +521,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     currentPrice: Schema.Attribute.String & Schema.Attribute.Required;
     description: Schema.Attribute.Text;
+    descriptionSection: Schema.Attribute.Component<
+      'content.description-section',
+      false
+    >;
     hasInteractiveElement: Schema.Attribute.Boolean & Schema.Attribute.Required;
     heroDescription: Schema.Attribute.String;
     heroDescriptionComponent: Schema.Attribute.String;

@@ -127,6 +127,12 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "descriptionSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "content.description-section",
+      "required": false
     }
   }
 }

@@ -121,6 +121,12 @@
     "productMetaData": {
       "type": "json",
       "required": false
+    },
+    "descriptionSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "content.description-section",
+      "required": false
     }
   }
 }

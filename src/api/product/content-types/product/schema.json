@@ -121,6 +121,13 @@
       "type": "json",
       "required": false
     },
+    "productAltImage": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
     "upsellProduct": {
       "type": "relation",
       "relation": "oneToOne",

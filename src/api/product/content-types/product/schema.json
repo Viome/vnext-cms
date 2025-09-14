@@ -121,22 +121,10 @@
       "type": "json",
       "required": false
     },
-    "productAltImage": {
-      "type": "media",
-      "multiple": true,
-      "allowedTypes": [
-        "images"
-      ]
-    },
-    "descriptionSection": {
-      "type": "dynamiczone",
-      "components": [
-        "content.description-section",
-        "content.rich-text",
-        "content.image",
-        "content.video"
-      ],
-      "required": false
+    "upsellProduct": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product"
     }
   }
 }

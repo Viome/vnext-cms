@@ -521,10 +521,6 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     currentPrice: Schema.Attribute.String & Schema.Attribute.Required;
     description: Schema.Attribute.Text;
-    descriptionSection: Schema.Attribute.Component<
-      'content.description-section',
-      false
-    >;
     hasInteractiveElement: Schema.Attribute.Boolean & Schema.Attribute.Required;
     heroDescription: Schema.Attribute.String;
     heroDescriptionComponent: Schema.Attribute.String;
@@ -542,7 +538,6 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::product.product'
     >;
-    productAltImage: Schema.Attribute.Media<'images', true>;
     productHeroImages: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
@@ -567,6 +562,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     upsellMeta: Schema.Attribute.JSON;
+    upsellProduct: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product.product'
+    >;
     upsellSlug: Schema.Attribute.String;
     variantId: Schema.Attribute.BigInteger & Schema.Attribute.Required;
   };

@@ -499,6 +499,40 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
+  collectionName: 'news_articles';
+  info: {
+    displayName: 'newsArticle';
+    pluralName: 'news-articles';
+    singularName: 'news-article';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Author: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Img: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    Link: Schema.Attribute.String;
+    LinkText: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::news-article.news-article'
+    > &
+      Schema.Attribute.Private;
+    publishDate: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
@@ -1158,6 +1192,7 @@ declare module '@strapi/strapi' {
       'api::author.author': ApiAuthorAuthor;
       'api::blog.blog': ApiBlogBlog;
       'api::category.category': ApiCategoryCategory;
+      'api::news-article.news-article': ApiNewsArticleNewsArticle;
       'api::product.product': ApiProductProduct;
       'api::reference.reference': ApiReferenceReference;
       'api::site-banner.site-banner': ApiSiteBannerSiteBanner;

@@ -17,8 +17,7 @@
     },
     "productSku": {
       "type": "string",
-      "required": true,
-      "unique": true
+      "required": true
     },
     "variantId": {
       "type": "biginteger",
@@ -26,7 +25,8 @@
     },
     "slug": {
       "type": "string",
-      "required": true
+      "required": true,
+      "unique": true
     },
     "shopifySubscriptionPlan": {
       "type": "biginteger",

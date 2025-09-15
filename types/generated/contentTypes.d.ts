@@ -581,16 +581,16 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'images' | 'files' | 'videos' | 'audios'
     >;
     productMetaData: Schema.Attribute.JSON;
-    productSku: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
+    productSku: Schema.Attribute.String & Schema.Attribute.Required;
     productType: Schema.Attribute.Enumeration<
       ['Health Tests', 'Essential Bundles', 'Personalized Health Products']
     >;
     publishedAt: Schema.Attribute.DateTime;
     salesMessage: Schema.Attribute.Text;
     shopifySubscriptionPlan: Schema.Attribute.BigInteger;
-    slug: Schema.Attribute.String & Schema.Attribute.Required;
+    slug: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

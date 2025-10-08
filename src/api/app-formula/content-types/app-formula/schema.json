@@ -1,0 +1,41 @@
+{
+  "kind": "singleType",
+  "collectionName": "app_formulas",
+  "info": {
+    "singularName": "app-formula",
+    "pluralName": "app-formulas",
+    "displayName": "app-formula"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "TabName": {
+      "type": "string"
+    },
+    "Title": {
+      "type": "json"
+    },
+    "Subtitle": {
+      "type": "json"
+    },
+    "promo": {
+      "type": "json"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    },
+    "CouponCode": {
+      "type": "string"
+    },
+    "OfferDuration": {
+      "type": "string"
+    },
+    "DiscountPercentage": {
+      "type": "integer"
+    }
+  }
+}

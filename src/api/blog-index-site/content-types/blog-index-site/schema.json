@@ -1,0 +1,30 @@
+{
+  "kind": "singleType",
+  "collectionName": "blog_index_sites",
+  "info": {
+    "singularName": "blog-index-site",
+    "pluralName": "blog-index-sites",
+    "displayName": "Blog Index Site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "viomeTopBlog": {
+      "type": "json"
+    },
+    "viomeSubBlogs": {
+      "type": "json"
+    },
+    "cdTopBlog": {
+      "type": "json"
+    },
+    "cdSubBlogs": {
+      "type": "json"
+    },
+    "cdBlogsCategories": {
+      "type": "json"
+    }
+  }
+}

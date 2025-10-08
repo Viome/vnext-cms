@@ -1,0 +1,20 @@
+{
+  "kind": "singleType",
+  "collectionName": "app_tests",
+  "info": {
+    "singularName": "app-test",
+    "pluralName": "app-tests",
+    "displayName": "app-test"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    }
+  }
+}

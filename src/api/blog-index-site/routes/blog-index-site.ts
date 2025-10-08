@@ -1,0 +1,7 @@
+/**
+ * blog-index-site router
+ */
+
+import { factories } from '@strapi/strapi';
+
+export default factories.createCoreRouter('api::blog-index-site.blog-index-site');

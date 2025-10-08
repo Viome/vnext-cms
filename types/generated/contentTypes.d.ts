@@ -373,6 +373,69 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAppFormulaAppFormula extends Struct.SingleTypeSchema {
+  collectionName: 'app_formulas';
+  info: {
+    displayName: 'app-formula';
+    pluralName: 'app-formulas';
+    singularName: 'app-formula';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    CouponCode: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    DiscountPercentage: Schema.Attribute.Integer;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::app-formula.app-formula'
+    > &
+      Schema.Attribute.Private;
+    OfferDuration: Schema.Attribute.String;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
+    promo: Schema.Attribute.JSON;
+    publishedAt: Schema.Attribute.DateTime;
+    Subtitle: Schema.Attribute.JSON;
+    TabName: Schema.Attribute.String;
+    Title: Schema.Attribute.JSON;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiAppTestAppTest extends Struct.SingleTypeSchema {
+  collectionName: 'app_tests';
+  info: {
+    displayName: 'app-test';
+    pluralName: 'app-tests';
+    singularName: 'app-test';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::app-test.app-test'
+    > &
+      Schema.Attribute.Private;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   collectionName: 'articles';
   info: {
@@ -434,6 +497,38 @@ export interface ApiAuthorAuthor extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiBlogIndexSiteBlogIndexSite extends Struct.SingleTypeSchema {
+  collectionName: 'blog_index_sites';
+  info: {
+    displayName: 'Blog Index Site';
+    pluralName: 'blog-index-sites';
+    singularName: 'blog-index-site';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    cdBlogsCategories: Schema.Attribute.JSON;
+    cdSubBlogs: Schema.Attribute.JSON;
+    cdTopBlog: Schema.Attribute.JSON;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::blog-index-site.blog-index-site'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    viomeSubBlogs: Schema.Attribute.JSON;
+    viomeTopBlog: Schema.Attribute.JSON;
   };
 }
 
@@ -1251,8 +1346,11 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::app-formula.app-formula': ApiAppFormulaAppFormula;
+      'api::app-test.app-test': ApiAppTestAppTest;
       'api::article.article': ApiArticleArticle;
       'api::author.author': ApiAuthorAuthor;
+      'api::blog-index-site.blog-index-site': ApiBlogIndexSiteBlogIndexSite;
       'api::blog.blog': ApiBlogBlog;
       'api::category.category': ApiCategoryCategory;
       'api::news-article.news-article': ApiNewsArticleNewsArticle;

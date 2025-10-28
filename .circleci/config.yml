@@ -82,6 +82,43 @@ commands:
             kubectl apply -f k8s-final/virtualservice.yaml
 
 jobs:
+  build_stage:
+    machine:
+      enabled: true
+      resource_class: viome/stage-azure-private-runner
+    working_directory: ~/repo_vcms
+    steps:
+      - checkout
+      - run:
+          name: Login and push image to ACR (ST)
+          command: |
+            az login --service-principal \
+              -u $ST_AZURE_CLIENT_ID \
+              -p $ST_AZURE_CLIENT_SECRET \
+              --tenant $ST_AZURE_TENANT_ID --allow-no-subscriptions
+            az acr login --name $ST_AZURE_ACR_NAME
+
+            export ACR_NAME=$ST_AZURE_ACR_NAME
+            export ACR_REPOSITORY=$ST_ACR_REPOSITORY_NAME
+            export IMAGE_TAG=${ACR_NAME}.azurecr.io/${ACR_REPOSITORY}:${CIRCLE_SHA1}
+
+            echo "export ACR_NAME=${ACR_NAME}" > ENV.txt
+            echo "export ACR_REPOSITORY=${ACR_REPOSITORY}" >> ENV.txt
+            echo "export IMAGE_TAG=${IMAGE_TAG}" >> ENV.txt
+            echo "export COMMIT_ID=${CIRCLE_SHA1}" >> ENV.txt
+            echo "export ENV_PREFIX=ST" >> ENV.txt
+            echo "export ENV_PREFIX_LOWER=st" >> ENV.txt
+
+            cat ENV.txt >> $BASH_ENV
+            source $BASH_ENV
+
+            docker build -t ${IMAGE_TAG} -f ~/repo_vcms/Dockerfile ~/repo_vcms
+            docker push ${IMAGE_TAG}
+      - persist_to_workspace:
+          root: ~/repo_vcms
+          paths:
+            - ENV.txt
+
   build_prod:
     machine:
       enabled: true
@@ -118,6 +155,25 @@ jobs:
           root: ~/repo_vcms
           paths:
             - ENV.txt
+  
+  deploy_stage:
+    machine:
+      enabled: true
+      resource_class: viome/stage-azure-private-runner
+    working_directory: ~/repo_vcms
+    steps:
+      - deploy_to_aks:
+          aks_cluster_name: aks-viome-st-eu-01
+          env_name: ST
+          deploy_folder: deployment
+          requestCpu: '1'
+          requestMemory: '2Gi'
+          limitsCpu: '2'
+          limitsMemory: '4Gi'
+          minReplicas: 2
+          maxReplicas: 5
+          averageCpuUtilization: 80
+          averageMemoryUtilization: 80
 
   deploy_prod:
     machine:
@@ -140,6 +196,18 @@ jobs:
 
 workflows:
   version: 2
+  production_pipeline:
+    jobs:
+      - start_pipeline:
+          type: approval
+      - build_stage:
+          requires: [start_pipeline]
+      - apprv_deploy:
+          type: approval
+          requires: [build_prod]
+      - deploy_stage:
+          requires: [apprv_deploy]
+          
   production_pipeline:
     jobs:
       - start_pipeline:

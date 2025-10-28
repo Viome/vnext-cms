@@ -1,0 +1,23 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: vnext-cms-vs
+  namespace: public-workload
+spec:
+  gateways:
+    - aks-istio-ingress/public-gateway
+  hosts:
+    - HOSTNAME
+  http:
+    - match:
+        - port: 80
+      redirect:
+        scheme: https
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: vnext-cms
+            port:
+              number: 80

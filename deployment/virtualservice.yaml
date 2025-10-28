@@ -7,7 +7,7 @@ spec:
   gateways:
     - aks-istio-ingress/public-gateway
   hosts:
-    - HOSTNAME
+    - ${HOSTNAME}
   http:
     - match:
         - port: 80

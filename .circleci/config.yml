@@ -32,6 +32,8 @@ commands:
         type: integer
       averageMemoryUtilization:
         type: integer
+      hostname:
+        type: string
     steps:
       - checkout
       - attach_workspace:
@@ -53,6 +55,7 @@ commands:
             echo "export MAX_REPLICAS=<< parameters.maxReplicas >>" >> $BASH_ENV
             echo "export AVERAGE_CPU_UTILIZATION=<< parameters.averageCpuUtilization >>" >> $BASH_ENV
             echo "export AVERAGE_MEMORY_UTILIZATION=<< parameters.averageMemoryUtilization >>" >> $BASH_ENV
+            echo "export HOSTNAME=<< parameters.hostname >>" >> $BASH_ENV
             source $BASH_ENV
       - run:
           name: Azure CLI login
@@ -171,9 +174,10 @@ jobs:
           limitsCpu: '2'
           limitsMemory: '4Gi'
           minReplicas: 2
-          maxReplicas: 5
+          maxReplicas: 3
           averageCpuUtilization: 80
           averageMemoryUtilization: 80
+          hostname: 'cms.stage.azure.viome.com'
 
   deploy_prod:
     machine:
@@ -193,6 +197,7 @@ jobs:
           maxReplicas: 5
           averageCpuUtilization: 80
           averageMemoryUtilization: 80
+          hostname: 'cms.azure.viome.com'
 
 workflows:
   version: 2

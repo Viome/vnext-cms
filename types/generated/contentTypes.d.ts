@@ -805,8 +805,18 @@ export interface ApiSiteBannerSiteBanner extends Struct.SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    campaignBackgroundColor: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'#000000'>;
+    bannerConfig: Schema.Attribute.JSON;
+    bannerType: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    campaignBackground: Schema.Attribute.Component<
+      'campaign.background',
+      false
+    >;
     campaignButtonLabel: Schema.Attribute.String;
     campaignButtonType: Schema.Attribute.Enumeration<['underlined', 'filled']>;
     campaignButtonUrl: Schema.Attribute.String;

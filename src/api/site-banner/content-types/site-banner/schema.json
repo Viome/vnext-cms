@@ -16,6 +16,18 @@
       "required": true,
       "default": false
     },
+    "bannerType": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "bannerConfig": {
+      "type": "json"
+    },
     "excludedPaths": {
       "type": "json"
     },
@@ -28,10 +40,11 @@
     "campaignClickUrl": {
       "type": "string"
     },
-    "campaignBackgroundColor": {
-      "type": "string",
-      "default": "#000000",
-      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+    "campaignBackground": {
+      "type": "component",
+      "repeatable": false,
+      "component": "campaign.background",
+      "required": false
     },
     "campaignText": {
       "type": "blocks"
@@ -57,6 +70,6 @@
     },
     "campaignButtonUrl": {
       "type": "string"
-    }
+    }    
   }
 }

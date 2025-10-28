@@ -196,7 +196,7 @@ jobs:
 
 workflows:
   version: 2
-  production_pipeline:
+  stage_pipeline:
     jobs:
       - start_pipeline:
           type: approval
@@ -204,7 +204,7 @@ workflows:
           requires: [start_pipeline]
       - apprv_deploy:
           type: approval
-          requires: [build_prod]
+          requires: [build_stage]
       - deploy_stage:
           requires: [apprv_deploy]
           

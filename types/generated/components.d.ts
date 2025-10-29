@@ -1,5 +1,25 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface CampaignBackground extends Struct.ComponentSchema {
+  collectionName: 'components_campaign_backgrounds';
+  info: {
+    description: 'Background configuration for campaign banners';
+    displayName: 'Campaign Background';
+    icon: 'paint-brush';
+  };
+  attributes: {
+    backgroundType: Schema.Attribute.Enumeration<
+      ['solid color', 'gradient', 'image']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'solid color'>;
+    desktopImage: Schema.Attribute.Media<'images'>;
+    gradient: Schema.Attribute.String;
+    mobileImage: Schema.Attribute.Media<'images'>;
+    solidColor: Schema.Attribute.String & Schema.Attribute.DefaultTo<'#000000'>;
+  };
+}
+
 export interface ContentImage extends Struct.ComponentSchema {
   collectionName: 'components_content_images';
   info: {
@@ -37,6 +57,7 @@ export interface ContentVideo extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'campaign.background': CampaignBackground;
       'content.image': ContentImage;
       'content.rich-text': ContentRichText;
       'content.video': ContentVideo;

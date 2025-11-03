@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_campaign_backgrounds",
+  "info": {
+    "displayName": "Campaign Background",
+    "description": "Background configuration for campaign banners",
+    "icon": "paint-brush"
+  },
+  "options": {},
+  "attributes": {
+    "backgroundType": {
+      "type": "enumeration",
+      "enum": [
+        "solid color",
+        "gradient",
+        "image"
+      ],
+      "required": true,
+      "default": "solid color"
+    },
+    "solidColor": {
+      "type": "string",
+      "default": "#000000",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+    },
+    "gradient": {
+      "type": "string"
+    },
+    "desktopImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "mobileImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}

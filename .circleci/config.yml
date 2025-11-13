@@ -193,10 +193,10 @@ jobs:
           requestMemory: '2Gi'
           limitsCpu: '2'
           limitsMemory: '4Gi'
-          minReplicas: 2
-          maxReplicas: 5
-          averageCpuUtilization: 80
-          averageMemoryUtilization: 80
+          minReplicas: 3
+          maxReplicas: 20
+          averageCpuUtilization: 50
+          averageMemoryUtilization: 50
           hostname: 'cms.azure.viome.com'
 
 workflows:
